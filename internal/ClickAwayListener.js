@@ -47,18 +47,6 @@ var isDescendant = function isDescendant(el, target) {
   return false;
 };
 
-var clickAwayEvents = ['mouseup', 'touchend'];
-var bind = function bind(callback) {
-  return clickAwayEvents.forEach(function (event) {
-    return _events2.default.on(document, event, callback);
-  });
-};
-var unbind = function unbind(callback) {
-  return clickAwayEvents.forEach(function (event) {
-    return _events2.default.off(document, event, callback);
-  });
-};
-
 var ClickAwayListener = function (_Component) {
   (0, _inherits3.default)(ClickAwayListener, _Component);
 
@@ -73,7 +61,19 @@ var ClickAwayListener = function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = ClickAwayListener.__proto__ || (0, _getPrototypeOf2.default)(ClickAwayListener)).call.apply(_ref, [this].concat(args))), _this), _this.handleClickAway = function (event) {
+    return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = ClickAwayListener.__proto__ || (0, _getPrototypeOf2.default)(ClickAwayListener)).call.apply(_ref, [this].concat(args))), _this), _this.handleMouseUp = function (event) {
+      _this.handleClickAway(event);
+    }, _this.handleTouchStart = function () {
+      _this.touchMoved = false;
+    }, _this.handleTouchMove = function () {
+      _this.touchMoved = true;
+    }, _this.handleTouchEnd = function (event) {
+      if (_this.touchMoved) {
+        return;
+      }
+
+      _this.handleClickAway(event);
+    }, _this.handleClickAway = function (event) {
       if (event.defaultPrevented) {
         return;
       }
@@ -93,25 +93,19 @@ var ClickAwayListener = function (_Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       this.isCurrentlyMounted = true;
-      if (this.props.onClickAway) {
-        bind(this.handleClickAway);
-      }
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps) {
-      if (prevProps.onClickAway !== this.props.onClickAway) {
-        unbind(this.handleClickAway);
-        if (this.props.onClickAway) {
-          bind(this.handleClickAway);
-        }
-      }
+      _events2.default.on(document, 'mouseup', this.handleMouseUp);
+      _events2.default.on(document, 'touchstart', this.handleTouchStart);
+      _events2.default.on(document, 'touchmove', this.handleTouchMove);
+      _events2.default.on(document, 'touchend', this.handleTouchEnd);
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       this.isCurrentlyMounted = false;
-      unbind(this.handleClickAway);
+      _events2.default.off(document, 'mouseup', this.handleMouseUp);
+      _events2.default.off(document, 'touchstart', this.handleTouchStart);
+      _events2.default.off(document, 'touchmove', this.handleTouchMove);
+      _events2.default.off(document, 'touchend', this.handleTouchEnd);
     }
   }, {
     key: 'render',
