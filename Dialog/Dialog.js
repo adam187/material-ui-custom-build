@@ -265,6 +265,8 @@ var DialogInline = function (_Component2) {
       }
     }, _this2.handleResize = function () {
       _this2.positionDialog();
+    }, _this2.handleOrientationChange = function () {
+      _this2.positionDialog();
     }, _temp2), (0, _possibleConstructorReturn3.default)(_this2, _ret2);
   }
 
@@ -406,7 +408,8 @@ var DialogInline = function (_Component2) {
         open && _react2.default.createElement(_reactEventListener2.default, {
           target: 'window',
           onKeyUp: this.handleKeyUp,
-          onResize: this.handleResize
+          onResize: this.handleResize,
+          onOrientationChange: this.handleOrientationChange
         }),
         _react2.default.createElement(
           _TransitionGroup2.default,
