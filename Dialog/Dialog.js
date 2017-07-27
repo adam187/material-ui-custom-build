@@ -78,6 +78,16 @@ var _TransitionGroup2 = _interopRequireDefault(_TransitionGroup);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function getVerticalSpace(props, context) {
+  var spacing = context.muiTheme.baseTheme.spacing;
+
+  if (props.verticalSpace !== undefined) {
+    return props.verticalSpace;
+  }
+
+  return spacing.desktopKeylineIncrement;
+}
+
 var TransitionItem = function (_Component) {
   (0, _inherits3.default)(TransitionItem, _Component);
 
@@ -111,12 +121,12 @@ var TransitionItem = function (_Component) {
   }, {
     key: 'componentWillAppear',
     value: function componentWillAppear(callback) {
-      var spacing = this.context.muiTheme.baseTheme.spacing;
+      var verticalSpace = getVerticalSpace(this.props, this.context);
 
       this.setState({
         style: {
           opacity: 1,
-          transform: 'translate(0, ' + spacing.desktopKeylineIncrement + 'px)'
+          transform: 'translate(0, ' + verticalSpace + 'px)'
         }
       });
 
@@ -140,7 +150,8 @@ var TransitionItem = function (_Component) {
       var _props = this.props,
           style = _props.style,
           children = _props.children,
-          other = (0, _objectWithoutProperties3.default)(_props, ['style', 'children']);
+          verticalSpace = _props.verticalSpace,
+          other = (0, _objectWithoutProperties3.default)(_props, ['style', 'children', 'verticalSpace']);
       var prepareStyles = this.context.muiTheme.prepareStyles;
 
 
@@ -159,7 +170,8 @@ TransitionItem.contextTypes = {
 };
 TransitionItem.propTypes = process.env.NODE_ENV !== "production" ? {
   children: _propTypes2.default.node,
-  style: _propTypes2.default.object
+  style: _propTypes2.default.object,
+  verticalSpace: _propTypes2.default.number
 } : {};
 
 
@@ -288,13 +300,14 @@ var DialogInline = function (_Component2) {
       var dialogWindow = _reactDom2.default.findDOMNode(this.refs.dialogWindow);
       var dialogContent = _reactDom2.default.findDOMNode(this.refs.dialogContent);
       var minPaddingTop = 16;
+      var verticalSpace = getVerticalSpace(this.props, this.context);
 
       // Reset the height in case the window was resized.
       dialogWindow.style.height = '';
       dialogContent.style.height = '';
 
       var dialogWindowHeight = dialogWindow.offsetHeight;
-      var paddingTop = (clientHeight - dialogWindowHeight) / 2 - 64;
+      var paddingTop = (clientHeight - dialogWindowHeight) / 2 - verticalSpace;
       if (paddingTop < minPaddingTop) paddingTop = minPaddingTop;
 
       // Vertically center the dialog window, but make sure it doesn't
@@ -307,7 +320,7 @@ var DialogInline = function (_Component2) {
       if (autoDetectWindowHeight || autoScrollBodyContent) {
         var styles = getStyles(this.props, this.context);
         styles.body = (0, _simpleAssign2.default)(styles.body, bodyStyle);
-        var maxDialogContentHeight = clientHeight - 2 * 64;
+        var maxDialogContentHeight = clientHeight - 2 * verticalSpace;
 
         if (title) maxDialogContentHeight -= dialogContent.previousSibling.offsetHeight;
 
@@ -354,7 +367,8 @@ var DialogInline = function (_Component2) {
           style = _props3.style,
           titleClassName = _props3.titleClassName,
           titleStyle = _props3.titleStyle,
-          title = _props3.title;
+          title = _props3.title,
+          verticalSpace = _props3.verticalSpace;
       var prepareStyles = this.context.muiTheme.prepareStyles;
 
       var styles = getStyles(this.props, this.context);
@@ -408,7 +422,8 @@ var DialogInline = function (_Component2) {
             TransitionItem,
             {
               className: contentClassName,
-              style: styles.content
+              style: styles.content,
+              verticalSpace: verticalSpace
             },
             _react2.default.createElement(
               _Paper2.default,
@@ -602,6 +617,10 @@ Dialog.propTypes = process.env.NODE_ENV !== "production" ? {
   /**
    * Overrides the inline-styles of the title's root container element.
    */
-  titleStyle: _propTypes2.default.object
+  titleStyle: _propTypes2.default.object,
+  /**
+   * Vertical space between dialog and browser edge
+   */
+  verticalSpace: _propTypes2.default.number
 } : {};
 exports.default = Dialog;
