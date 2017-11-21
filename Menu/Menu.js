@@ -85,7 +85,7 @@ function getStyles(props, context) {
 
   var styles = {
     root: {
-      // Nested div bacause the List scales x faster than it scales y
+      // Nested div because the List scales x faster than it scales y
       zIndex: muiTheme.zIndex.menu,
       maxHeight: maxHeight,
       overflowY: maxHeight ? 'auto' : null
@@ -521,6 +521,18 @@ var _initialiseProps = function _initialiseProps() {
 
   this.handleClickAway = function (event) {
     if (event.defaultPrevented) {
+      return;
+    }
+
+    var focusIndex = _this5.state.focusIndex;
+
+    if (focusIndex < 0) {
+      return;
+    }
+
+    var filteredChildren = _this5.getFilteredChildren(_this5.props.children);
+    var focusedItem = filteredChildren[focusIndex];
+    if (focusedItem.props.menuItems && focusedItem.props.menuItems.length > 0) {
       return;
     }
 

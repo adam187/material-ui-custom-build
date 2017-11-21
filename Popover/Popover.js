@@ -103,7 +103,8 @@ var Popover = function (_Component) {
           style = _this$props.style,
           targetOrigin = _this$props.targetOrigin,
           useLayerForClickAway = _this$props.useLayerForClickAway,
-          other = (0, _objectWithoutProperties3.default)(_this$props, ['animated', 'animation', 'anchorEl', 'anchorOrigin', 'autoCloseWhenOffScreen', 'canAutoPosition', 'children', 'onRequestClose', 'style', 'targetOrigin', 'useLayerForClickAway']);
+          scrollableContainer = _this$props.scrollableContainer,
+          other = (0, _objectWithoutProperties3.default)(_this$props, ['animated', 'animation', 'anchorEl', 'anchorOrigin', 'autoCloseWhenOffScreen', 'canAutoPosition', 'children', 'onRequestClose', 'style', 'targetOrigin', 'useLayerForClickAway', 'scrollableContainer']);
 
 
       var styleRoot = style;
@@ -180,8 +181,8 @@ var Popover = function (_Component) {
         targetPosition = _this.applyAutoPositionIfNeeded(anchor, target, targetOrigin, anchorOrigin, targetPosition);
       }
 
-      targetEl.style.top = Math.max(0, targetPosition.top) + 'px';
-      targetEl.style.left = Math.max(0, targetPosition.left) + 'px';
+      targetEl.style.top = targetPosition.top + 'px';
+      targetEl.style.left = targetPosition.left + 'px';
       targetEl.style.maxHeight = window.innerHeight + 'px';
     };
 
@@ -388,7 +389,7 @@ var Popover = function (_Component) {
         'div',
         { style: styles.root },
         _react2.default.createElement(_reactEventListener2.default, {
-          target: 'window',
+          target: this.props.scrollableContainer,
           onScroll: this.handleScroll,
           onResize: this.handleResize
         }),
@@ -415,6 +416,7 @@ Popover.defaultProps = {
   canAutoPosition: true,
   onRequestClose: function onRequestClose() {},
   open: false,
+  scrollableContainer: 'window',
   style: {
     overflowY: 'auto'
   },
@@ -480,6 +482,11 @@ Popover.propTypes = process.env.NODE_ENV !== "production" ? {
    * If true, the popover is visible.
    */
   open: _propTypes2.default.bool,
+  /**
+   * Represents the parent scrollable container.
+   * It can be an element or a string like `window`.
+   */
+  scrollableContainer: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.string]),
   /**
    * Override the inline-styles of the root element.
    */
