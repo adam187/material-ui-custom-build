@@ -54,6 +54,10 @@ var RenderToLayer = function (_Component) {
     }
 
     return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = RenderToLayer.__proto__ || (0, _getPrototypeOf2.default)(RenderToLayer)).call.apply(_ref, [this].concat(args))), _this), _this.onClickAway = function (event) {
+      if (!_this.isCurrentlyMounted) {
+        return;
+      }
+
       if (event.defaultPrevented) {
         return;
       }
@@ -76,6 +80,7 @@ var RenderToLayer = function (_Component) {
   (0, _createClass3.default)(RenderToLayer, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      this.isCurrentlyMounted = true;
       this.renderLayer();
     }
   }, {
@@ -86,6 +91,7 @@ var RenderToLayer = function (_Component) {
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
+      this.isCurrentlyMounted = false;
       this.unrenderLayer();
     }
   }, {
